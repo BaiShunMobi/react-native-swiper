@@ -195,6 +195,9 @@ export default class extends Component {
   componentWillReceiveProps (nextProps) {
     if (!nextProps.autoplay && this.autoplayTimer) clearTimeout(this.autoplayTimer)
     this.setState(this.initState(nextProps, this.props.index !== nextProps.index))
+    if (this.props.autoplay !== nextProps.autoplay && nextProps.autoplay === true) {
+      setImmediate(this.autoplay)
+    }
   }
 
   componentDidMount () {
@@ -251,9 +254,10 @@ export default class extends Component {
       initState.height = height;
     }
 
+    let offsetIndex = props.loop ? (props.index + 1) : props.index;
     initState.offset[initState.dir] = initState.dir === 'y'
-      ? height * props.index
-      : width * props.index
+      ? height * offsetIndex
+      : width * offsetIndex;
 
 
     this.internals = {
