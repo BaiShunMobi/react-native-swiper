@@ -143,7 +143,11 @@ export default class extends Component {
     /**
      * Called when the index has changed because the user swiped.
      */
-    onIndexChanged: PropTypes.func
+    onIndexChanged: PropTypes.func,
+    /**
+     * 通过传原始数据，来判断视图轮播逻辑是否要重新校准，如果需要重新校准，需要添加该字段属性。
+     * 默认不传为 null，意味着不进行校准 */
+    contentData: PropTypes.array
   }
 
   /**
@@ -170,7 +174,8 @@ export default class extends Component {
     autoplayTimeout: 2.5,
     autoplayDirection: true,
     index: 0,
-    onIndexChanged: () => null
+    onIndexChanged: () => null,
+    contentData: null
   }
 
   /**
@@ -253,8 +258,8 @@ export default class extends Component {
     } else {
       initState.height = height;
     }
-
-    let offsetIndex = props.loop ? (initState.index + 1) : props.index;
+    let contentNoChanged = props.contentData === this.props.contentData;
+    let offsetIndex = (props.loop && contentNoChanged) ? (initState.index + 1) : props.index;
     initState.offset[initState.dir] = initState.dir === 'y'
       ? height * offsetIndex
       : width * offsetIndex;
