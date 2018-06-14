@@ -259,7 +259,9 @@ export default class extends Component {
       initState.height = height;
     }
     let contentNoChanged = props.contentData === this.props.contentData;
-    let offsetIndex = (props.loop && contentNoChanged) ? (initState.index + 1) : props.index;
+    let infoValid = (props.contentData !== null) && (props.contentData.length > 1); // 只有在配置了这个属性才能使用下面的轮播+1
+    let needOver = props.loop && contentNoChanged && infoValid;
+    let offsetIndex = needOver ? (initState.index + 1) : props.index;
     initState.offset[initState.dir] = initState.dir === 'y'
       ? height * offsetIndex
       : width * offsetIndex;
